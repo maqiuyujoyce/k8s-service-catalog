@@ -55,6 +55,7 @@ in a Kubernets Cluster.`,
 		cmd.NewRemoveGCPBrokerCmd(),
 		cmd.NewUpdateCmd(),
 		cmd.NewVersionCmd(),
+		cmd.NewUpdateGCPBrokerCmd(),
 	)
 
 	// Add any globals flags here

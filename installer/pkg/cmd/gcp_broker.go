@@ -35,6 +35,7 @@ import (
 	"github.com/GoogleCloudPlatform/k8s-service-catalog/installer/pkg/broker-cli/auth"
 	"github.com/GoogleCloudPlatform/k8s-service-catalog/installer/pkg/broker-cli/client/adapter"
 	"github.com/GoogleCloudPlatform/k8s-service-catalog/installer/pkg/gcp"
+	"github.com/kubernetes-incubator/service-catalog/pkg/client/clientset_generated/clientset"
 	"github.com/spf13/cobra"
 )
 
@@ -112,6 +113,8 @@ func addGCPBroker() error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Println("using service account: ", brokerSAEmail)
 
 	err = gcp.AddServiceAccountPerms(projectID, brokerSAEmail, brokerSARole)
 	if err != nil {
@@ -442,4 +445,24 @@ func removeConfigs(dir string, filenames []string) error {
 		}
 	}
 	return nil
+}
+
+func NewUpdateGCPBrokerCmd() *cobra.Command {
+	return &cobra.Command{
+		Use:   "update-gcp-broker",
+		Short: "Updates GCP broker",
+		Long:  `Updates the GCP broker in Service Catalog`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			if err := updateGCPBroker(); err != nil {
+				fmt.Println("failed to update GCP broker")
+				return err
+			}
+			fmt.Println("GCP broker updated successfully.")
+			return nil
+		},
+	}
+}
+
+func updateGCPBroker() error {
+	gcpBroker := sdk.ServiceCatalogClient.ServicecatalogV1beta1()
 }
